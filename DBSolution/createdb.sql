@@ -1,0 +1,37 @@
+-- Drop existing database and recreate it
+DROP DATABASE IF EXISTS PostCommentsDb;
+
+CREATE DATABASE PostCommentsDb;
+
+USE PostCommentsDb;
+
+-- Users Table
+DROP TABLE IF EXISTS Users;
+CREATE TABLE IF NOT EXISTS Users (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL, 
+    Email VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Posts Table
+DROP TABLE IF EXISTS Posts;
+CREATE TABLE IF NOT EXISTS Posts (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Content TEXT NOT NULL,
+    UserId INT,  
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE ON UPDATE CASCADE   
+);
+
+-- Comments Table with Author Column
+DROP TABLE IF EXISTS Comments;
+CREATE TABLE IF NOT EXISTS Comments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    PostId INT NOT NULL,  
+    UserId INT,  -- Foreign key to Users table
+    Author VARCHAR(100), -- Author name column
+    Content TEXT NOT NULL,
+    FOREIGN KEY (PostId) REFERENCES Posts(Id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE ON UPDATE CASCADE   
+);
